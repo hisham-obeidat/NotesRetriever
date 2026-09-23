@@ -16,3 +16,25 @@ A fast, web-based retrieval system designed to efficiently ingest, organize, and
 * **Language:** Python
 * **Web Framework:** Flask
 * **Data Processing:** Jupyter Notebook, Pymupdf, pptx
+
+## 🗂️ Data Architecture
+
+**Note on Data:** This is a personal project, and the database is built entirely from my own university notes. The underlying database files are excluded from this repository for privacy. 
+To run the `ingestion.ipynb` pipeline locally, you will need to supply your own `.pptx` or `.pdf` files, and **update the root directory path in the notebook** to point to your local folder.
+The ingestion script expects the raw data to follow a strict hierarchical folder structure:
+**`Year -> Semester -> Course -> Topic (Optional) -> File`**
+Here is an example of the expected directory tree. In this case, the root path variable in your ingestion notebook should be set to `Notes_Database`:
+```
+Notes_Database/
+├── 2025/
+│   ├── Spring/
+│   │   ├── Deep_Learning/
+│   │   │   ├── CNN_Architectures/
+│   │   │   │   └── module_4_slides.pptx
+│   │   │   └── Regularization/
+│   │   │       └── notes.pdf
+│   │   └── Big_Data_Processing/
+│   │       ├── Apache_Spark/
+│   │       │   └── cluster_setup.pptx
+│   │       └── lecture_01.pdf     <-- (Topic folder is optional)
+-> In this case the root should be Notes_Database
