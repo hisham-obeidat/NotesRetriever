@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f2ecd8;
+    --paper-dim: #e7dfc4;
+    --ink: #1c2b3a;
+    --ink-soft: #4b5b6b;
+    --rule: #cfc4a0;
+    --stamp: #7a3b45;
+    --stamp-soft: #e8d8d4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5rem 1.5rem 4rem;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  header {
+    margin-bottom: 2.75rem;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin: 0 0 0.4rem;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 2.4rem;
+    line-height: 1.15;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .search-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 2.25rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.75rem;
+  }
+
+  #q {
+    flex: 1;
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    outline: none;
+  }
+
+  #q::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.55;
+  }
+
+  select#course {
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.4rem 1.8rem 0.4rem 0.7rem;
+    outline: none;
+    max-width: 170px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%234b5b6b' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  select#course:hover {
+    border-color: var(--stamp);
+    background-color: var(--paper);
+  }
+
+  select#course:focus {
+    border-color: var(--stamp);
+  }
+  select#course option {
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  background: var(--paper);
+  color: var(--ink);
+}
+  .status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.85rem;
+    min-height: 1.2em;
+  }
+
+  .results {
+    margin-top: 1.75rem;
+  }
+
+  .card {
+    position: relative;
+    padding: 1.1rem 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .card:first-child {
+    border-top: none;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.35rem;
+    bottom: 1.35rem;
+    width: 3px;
+    background: var(--stamp);
+    opacity: 0.55;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.35rem;
+  }
+
+  .card-path span:not(:last-child)::after {
+    content: " / ";
+    opacity: 0.5;
+  }
+
+  .card-page {
+    white-space: nowrap;
+  }
+
+  .card-file {
+    font-family: 'Fraunces', serif;
+    font-size: 1.08rem;
+    font-weight: 500;
+    margin: 0 0 0.35rem;
+    color: var(--ink);
+  }
+
+  .card-snippet {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .card-snippet mark {
+    background: var(--stamp-soft);
+    color: var(--stamp);
+    padding: 0.05em 0.15em;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+
+  .empty {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    padding: 2rem 0;
+    text-align: left;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <p class="eyebrow">Personal slide index</p>
+      <h1>What are you looking for?</h1>
+      <div class="search-row">
+        <input type="text" id="q" placeholder="e.g. hierarchical clustering, MapReduce, semaphores…" autofocus autocomplete="off">
+        <select id="course">
+          <option value="">All courses</option>
+        </select>
+      </div>
+      <p class="status" id="status"></p>
+    </header>
+
+    <div class="results" id="results"></div>
+  </div>
+
+<script>
+const qInput = document.getElementById('q');
+const courseSelect = document.getElementById('course');
+const resultsEl = document.getElementById('results');
+const statusEl = document.getElementById('status');
+
+let debounceTimer = null;
+
+async function loadCourses() {
+  try {
+    const res = await fetch('/api/courses');
+    const data = await res.json();
+    for (const c of data.courses) {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      courseSelect.appendChild(opt);
+    }
+  } catch (e) { /* silent — course filter is optional */ }
+}
+
+function renderResults(data) {
+  resultsEl.innerHTML = '';
+
+  if (!data.query) {
+    statusEl.textContent = '';
+    return;
+  }
+
+  if (data.results.length === 0) {
+    statusEl.textContent = `No matches for "${data.query}"`;
+    resultsEl.innerHTML = `<p class="empty">Nothing found. Try a shorter or different term.</p>`;
+    return;
+  }
+
+  statusEl.textContent = `${data.count} match${data.count === 1 ? '' : 'es'} for "${data.query}"`;
+
+  for (const r of data.results) {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const pathParts = [r.year, r.semester, r.course, r.topic].filter(Boolean);
+
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-path">${pathParts.map(p => `<span>${escapeHtml(p)}</span>`).join('')}</span>
+        <span class="card-page">page ${r.pageNum}</span>
+      </div>
+      <p class="card-file">${escapeHtml(r.filename)}</p>
+      <p class="card-snippet">${r.snippet}</p>
+    `;
+    resultsEl.appendChild(card);
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str ?? '';
+  return div.innerHTML;
+}
+
+async function runSearch() {
+  const q = qInput.value.trim();
+  const course = courseSelect.value;
+
+  if (!q) {
+    resultsEl.innerHTML = '';
+    statusEl.textContent = '';
+    return;
+  }
+
+  statusEl.textContent = 'Searching…';
+
+  const params = new URLSearchParams({ q });
+  if (course) params.set('course', course);
+
+  try {
+    const res = await fetch(`/api/search?${params.toString()}`);
+    const data = await res.json();
+    renderResults(data);
+  } catch (e) {
+    statusEl.textContent = 'Search failed — is the server running?';
+  }
+}
+
+qInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(runSearch, 250);
+});
+courseSelect.addEventListener('change', runSearch);
+
+loadCourses();
+</script>
+</body>
+</html>
